@@ -152,6 +152,22 @@ export const ChevronDown = ({
   );
 };
 
+export const ChevronLeft = () => {
+  return (
+    <Svg
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      fill="none"
+    >
+      <Path
+        d="M16.03 4.47a.75.75 0 01.073.976l-.073.084L9.561 12l6.47 6.47a.75.75 0 01.072.976l-.073.084a.75.75 0 01-.976.073l-.084-.073-7-7a.75.75 0 01-.073-.976l.073-.084 7-7a.75.75 0 011.06 0z"
+        fill="#2A2A2A"
+      />
+    </Svg>
+  );
+};
+
 export const SearchIcon = () => {
   return (
     <Svg width={20} height={20} viewBox="0 0 20 20" fill="none">

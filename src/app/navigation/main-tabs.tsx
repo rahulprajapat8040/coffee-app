@@ -1,4 +1,4 @@
-import { CustomTabBar } from '@/components/common/tab/custom-tab-bar';
+import { CustomTabBar } from '@/components/common/navigation/custom-tab-bar';
 import { HomeScreen } from '@/features/home/screens/home-screen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 

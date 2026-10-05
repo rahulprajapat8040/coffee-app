@@ -13,6 +13,10 @@ import { HomeBanner } from '../components/home-banner';
 import { Homecategories } from '../components/home-categories';
 import { COLORS } from '@/lib/constants/color.constant';
 import { Plus } from '@/components/common/icons/svg';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { MainTabParamList } from '@/app/navigation/main-tabs';
+import { MainStackParamList } from '@/app/navigation/main-navigator';
 
 interface ProductProp {
   id: string;
@@ -21,6 +25,7 @@ interface ProductProp {
   category: string;
   price: number;
   image: ImageSource;
+  onPress?: () => void;
 }
 
 const products: ProductProp[] = [
@@ -90,7 +95,13 @@ const products: ProductProp[] = [
   },
 ];
 
+type NavigationProp = NativeStackNavigationProp<
+  MainStackParamList,
+  'CofeeDetails'
+>;
+
 export const HomeScreen = () => {
+  const navigation = useNavigation<NavigationProp>();
   return (
     <FlatList
       key="products-2-columns"
@@ -122,7 +133,14 @@ export const HomeScreen = () => {
           </View>
         </>
       }
-      renderItem={({ item }) => <ProductCard {...item} />}
+      renderItem={({ item }) => (
+        <ProductCard
+          {...item}
+          onPress={() =>
+            navigation.navigate('CofeeDetails', { coffeeId: item.id })
+          }
+        />
+      )}
     />
   );
 };
@@ -134,9 +152,10 @@ const ProductCard = ({
   category,
   price,
   image,
+  onPress
 }: ProductProp) => {
   return (
-    <View style={styles.card}>
+    <Pressable onPress={onPress} style={styles.card}>
       <Image style={styles.productImage} source={image} />
       <View style={{ marginTop: 6 }}>
         <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{name}</Text>
@@ -164,7 +183,7 @@ const ProductCard = ({
           </Pressable>
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 };
 
