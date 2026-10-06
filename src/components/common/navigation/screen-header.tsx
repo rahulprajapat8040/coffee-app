@@ -23,6 +23,8 @@ export const ScreenHeader = ({ title, rightIcon, onIconPress }: Props) => {
 
 const styles = StyleSheet.create({
   container: {
+    position: 'static',
+    top:0,
     padding: 22,
     flexDirection: 'row',
     alignItems: 'center',

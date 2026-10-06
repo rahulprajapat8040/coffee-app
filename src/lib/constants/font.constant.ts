@@ -5,4 +5,5 @@ export const FONTS = {
   medium: 'Sora-Medium',
   semibold: 'Sora-SemiBold',
   bold: 'Sora-Bold',
+  light: 'Sora-Light'
 } as const;
