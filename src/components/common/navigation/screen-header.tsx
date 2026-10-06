@@ -1,6 +1,9 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { ChevronLeft } from '../icons/svg';
 import { COLORS } from '@/lib/constants/color.constant';
+import { AppText } from '../text/app-text';
+import { FONTS } from '@/lib/constants/font.constant';
+import { useNavigation } from '@react-navigation/native';
 
 interface Props {
   title?: string;
@@ -8,14 +11,15 @@ interface Props {
   onIconPress?: () => void;
 }
 export const ScreenHeader = ({ title, rightIcon, onIconPress }: Props) => {
+  const navigate = useNavigation();
   return (
     <View style={styles.container}>
-      <Pressable>
-        <Text style={styles.title}>
+      <Pressable onPress={() => navigate.goBack()}>
+        <AppText style={styles.title}>
           <ChevronLeft />
-        </Text>
+        </AppText>
       </Pressable>
-      <Text>{title}</Text>
+      <AppText weight={FONTS.semibold}>{title}</AppText>
       <Text>{rightIcon}</Text>
     </View>
   );
@@ -24,7 +28,7 @@ export const ScreenHeader = ({ title, rightIcon, onIconPress }: Props) => {
 const styles = StyleSheet.create({
   container: {
     position: 'static',
-    top:0,
+    top: 0,
     padding: 22,
     flexDirection: 'row',
     alignItems: 'center',
@@ -33,6 +37,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     color: COLORS.GREY.NORMAL,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
 });

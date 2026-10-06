@@ -11,7 +11,11 @@ import { AppText } from '@/components/common/text/app-text';
 import { ReadMoreText } from '@/components/common/text/read-more-text';
 import { COLORS } from '@/lib/constants/color.constant';
 import { FONTS } from '@/lib/constants/font.constant';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
+import {
+  NativeStackNavigationProp,
+  NativeStackScreenProps,
+} from '@react-navigation/native-stack';
 import { useState } from 'react';
 import {
   Image,
@@ -49,7 +53,9 @@ const Sizes = [
   { label: 'XLL', value: 'xll' },
 ];
 
+type NavigationProp = NativeStackNavigationProp<MainStackParamList, 'Checkout'>;
 export const CoffeeDetailScreen = ({ route }: Props) => {
+  const navigation = useNavigation<NavigationProp>();
   const { coffeeId } = route.params;
   const { width } = useWindowDimensions();
   const buttonWidth = (width - 40 - 24) / 3;
@@ -162,7 +168,10 @@ export const CoffeeDetailScreen = ({ route }: Props) => {
           </AppText>
         </View>
         <View>
-          <Pressable style={styles.orderButton}>
+          <Pressable
+            onPress={() => navigation.navigate('Checkout')}
+            style={styles.orderButton}
+          >
             <AppText
               weight={FONTS.bold}
               style={{
