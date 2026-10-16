@@ -109,6 +109,7 @@ export const HomeScreen = () => {
       numColumns={2}
       contentContainerStyle={{
         paddingBottom: 30,
+        backgroundColor: COLORS.SURFACE.LIGHT
       }}
       columnWrapperStyle={{
         gap: 12,
@@ -117,7 +118,7 @@ export const HomeScreen = () => {
       keyExtractor={item => item.id}
       ListHeaderComponent={
         <>
-          <View>
+          <View >
             <StatusBar barStyle="light-content" />
             <View style={{ height: 390 }}>
               <View style={styles.header}>
@@ -152,7 +153,7 @@ const ProductCard = ({
   category,
   price,
   image,
-  onPress
+  onPress,
 }: ProductProp) => {
   return (
     <Pressable onPress={onPress} style={styles.card}>

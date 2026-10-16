@@ -48,30 +48,30 @@ export const CheckoutItems = () => {
 
   return (
     <View>
-        {checkoutItems.map(item => {
-          return (
-            <View style={styles.itemContainer}>
-              <Image style={styles.itemImage} source={item.image} />
-              <View style={{ flex: 1 }}>
-                <AppText
-                  size={FONT_SIZES.base}
-                  weight={FONTS.semibold}
-                  style={{ paddingVertical: 2 }}
-                >
-                  {item.name}
-                </AppText>
-                <AppText size={FONT_SIZES.sm} color={COLORS.GREY.LIGHT}>
-                  {item.category}
-                </AppText>
-              </View>
-              <QuantityCounter
-                quantity={item.quantity}
-                onPress={quantity => updateQuantity(item.id, quantity)}
-              />
+      {checkoutItems.map(item => {
+        return (
+          <View key={item.id} style={styles.itemContainer}>
+            <Image style={styles.itemImage} source={item.image} />
+            <View style={{ flex: 1 }}>
+              <AppText
+                size={FONT_SIZES.base}
+                weight={FONTS.semibold}
+                style={{ paddingVertical: 2 }}
+              >
+                {item.name}
+              </AppText>
+              <AppText size={FONT_SIZES.sm} color={COLORS.GREY.LIGHT}>
+                {item.category}
+              </AppText>
             </View>
-          );
-        })}
-      </View>
+            <QuantityCounter
+              quantity={item.quantity}
+              onPress={quantity => updateQuantity(item.id, quantity)}
+            />
+          </View>
+        );
+      })}
+    </View>
   );
 };
 
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 14,
     alignItems: 'center',
-    marginBottom: 18
+    marginBottom: 18,
   },
   itemImage: {
     width: 54,

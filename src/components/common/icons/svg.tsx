@@ -505,3 +505,24 @@ export const ChevronRight = () => {
     </Svg>
   );
 };
+
+export const Wallet = ({ size = 24, color = 'currentColor' }: IconProps) => {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 20 20" fill="none">
+      <Path
+        d="M18.032 11.996H14.66a2.244 2.244 0 010-4.485h3.373M15.04 9.702h-.26"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        stroke={color}
+      />
+      <Path
+        d="M6.456 2.5h7.203a4.373 4.373 0 014.373 4.373v5.98a4.373 4.373 0 01-4.373 4.374H6.456a4.373 4.373 0 01-4.373-4.373v-5.98A4.373 4.373 0 016.456 2.5zM5.863 6.282h4.5"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        stroke={color}
+      />
+    </Svg>
+  );
+};

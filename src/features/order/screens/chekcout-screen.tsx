@@ -10,6 +10,7 @@ import { Separator } from '@/components/ui/separator';
 import { COLORS } from '@/lib/constants/color.constant';
 import { CheckoutDiscount } from '../components/checkout-discount';
 import { CheckoutPaymentSummary } from '../components/checkout-payment-summary';
+import { PlaceOrder } from '../components/place-order';
 
 export const CheckoutScreen = () => {
   const [tab, setTab] = useState<Tab>('DELIVER');
@@ -28,6 +29,7 @@ export const CheckoutScreen = () => {
           <CheckoutPaymentSummary />
         </View>
       </ScrollView>
+      <PlaceOrder />
     </SafeAreaView>
   );
 };

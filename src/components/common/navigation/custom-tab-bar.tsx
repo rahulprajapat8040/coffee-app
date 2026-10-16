@@ -61,16 +61,7 @@ const styles = StyleSheet.create({
     borderTopEndRadius: 30,
     height: 100,
     paddingHorizontal: 13,
-    shadowColor: '#000000ab',
-    shadowOffset: {
-      width: 0,
-      height: -3,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-
-    // Android
-    elevation: 1,
+    backgroundColor: COLORS.SURFACE.WHITE
   },
   tabContainer: {
     flex: 1,
@@ -96,7 +87,7 @@ const styles = StyleSheet.create({
   tabButtonActive: {
     marginTop: 3,
     width: 20,
-    height: 5,
+    height: 3,
     borderRadius: 5,
     backgroundColor: COLORS.BRWON.NORMAL,
   },
