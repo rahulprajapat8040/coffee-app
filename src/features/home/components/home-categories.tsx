@@ -1,4 +1,5 @@
 import { COLORS } from '@/lib/constants/color.constant';
+import { Category } from '@/lib/interfaces/home-res.interface';
 import { act, useState } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 
@@ -9,25 +10,21 @@ interface ButtonProps {
   activeId: string | null;
 }
 
-const categories = [
-  { id: null, name: 'All Coffee' },
-  { id: '1', name: 'Machiato' },
-  { id: '2', name: 'Latte' },
-  { id: '3', name: 'American Esspresso' },
-  { id: '4', name: 'Macha' },
-];
+interface Props {
+  categories: Category[];
+  activeId: string | null;
+  onPress: (id: string | null) => void;
+}
 
-export const Homecategories = () => {
-  const [activeId, setActiveId] = useState<string | null>(null);
-
-  const handleChange = (id: string | null) => {
-    setActiveId(id);
-  };
-
+export const Homecategories = ({ categories, onPress, activeId }: Props) => {
+  const allCategories: Category[] = [
+    { id: null, name: 'All Coffee' },
+    ...categories,
+  ];
   return (
     <View style={{ marginBottom: 18, paddingHorizontal: 20 }}>
       <FlatList
-        data={categories}
+        data={allCategories}
         horizontal
         showsHorizontalScrollIndicator={false}
         keyExtractor={item => item.id || ''}
@@ -35,7 +32,7 @@ export const Homecategories = () => {
           <CategoryButton
             id={item.id}
             name={item.name}
-            onPress={id => handleChange(id)}
+            onPress={id => onPress(id)}
             activeId={activeId}
           />
         )}

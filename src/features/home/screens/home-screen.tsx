@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   FlatList,
   Image,
   ImageSource,
@@ -15,85 +16,17 @@ import { COLORS } from '@/lib/constants/color.constant';
 import { Plus } from '@/components/common/icons/svg';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { MainTabParamList } from '@/app/navigation/main-tabs';
 import { MainStackParamList } from '@/app/navigation/main-navigator';
+import { useInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { homeApi } from '@/features/home/api/home.api';
+import { ICoffee } from '@/lib/interfaces/coffes.interface';
+import { useMemo, useState } from 'react';
 
-interface ProductProp {
-  id: string;
-  rating: number;
-  name: string;
-  category: string;
-  price: number;
-  image: ImageSource;
+interface ProductProp extends ICoffee {
   onPress?: () => void;
 }
 
-const products: ProductProp[] = [
-  {
-    id: '1',
-    rating: 4.8,
-    name: 'Caffe Mocha',
-    category: 'Deep Foam',
-    price: 4.53,
-    image: require('@/assets/dummy/categories/cat-1.png'),
-  },
-  {
-    id: '2',
-    rating: 4.8,
-    name: 'Caffe Mocha',
-    category: 'Deep Foam',
-    price: 4.53,
-    image: require('@/assets/dummy/categories/cat-1.png'),
-  },
-  {
-    id: '3',
-    rating: 4.8,
-    name: 'Caffe Mocha',
-    category: 'Deep Foam',
-    price: 4.53,
-    image: require('@/assets/dummy/categories/cat-1.png'),
-  },
-  {
-    id: '4',
-    rating: 4.8,
-    name: 'Caffe Mocha',
-    category: 'Deep Foam',
-    price: 4.53,
-    image: require('@/assets/dummy/categories/cat-1.png'),
-  },
-  {
-    id: '5',
-    rating: 4.8,
-    name: 'Caffe Mocha',
-    category: 'Deep Foam',
-    price: 4.53,
-    image: require('@/assets/dummy/categories/cat-1.png'),
-  },
-  {
-    id: '6',
-    rating: 4.8,
-    name: 'Caffe Mocha',
-    category: 'Deep Foam',
-    price: 4.53,
-    image: require('@/assets/dummy/categories/cat-1.png'),
-  },
-  {
-    id: '7',
-    rating: 4.8,
-    name: 'Caffe Mocha',
-    category: 'Deep Foam',
-    price: 4.53,
-    image: require('@/assets/dummy/categories/cat-1.png'),
-  },
-  {
-    id: '8',
-    rating: 4.8,
-    name: 'Caffe Mocha',
-    category: 'Deep Foam',
-    price: 4.53,
-    image: require('@/assets/dummy/categories/cat-1.png'),
-  },
-];
+
 
 type NavigationProp = NativeStackNavigationProp<
   MainStackParamList,
@@ -102,6 +35,39 @@ type NavigationProp = NativeStackNavigationProp<
 
 export const HomeScreen = () => {
   const navigation = useNavigation<NavigationProp>();
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
+    null,
+  );
+
+  const {
+    data: {
+      data: { categories },
+    },
+  } = useSuspenseQuery({
+    queryFn: () => homeApi.getCategories(),
+    queryKey: ['home', 'categories'],
+  });
+
+   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+     useInfiniteQuery({
+       queryFn: ({ pageParam }) =>
+         homeApi.getCoffees({
+           categoryId: selectedCategoryId,
+           page: pageParam,
+         }),
+       queryKey: ['home', 'products', selectedCategoryId],
+       initialPageParam: 1,
+       getNextPageParam: lastPage => {
+         const { page, totalPage } = lastPage.data.pageInfo;
+         return page < totalPage ? page + 1 : undefined;
+       },
+     });
+
+     const products = useMemo(
+       () => data?.pages.flatMap(page => page.data.data),
+       [data?.pages],
+     );
+
   return (
     <FlatList
       key="products-2-columns"
@@ -109,16 +75,31 @@ export const HomeScreen = () => {
       numColumns={2}
       contentContainerStyle={{
         paddingBottom: 30,
-        backgroundColor: COLORS.SURFACE.LIGHT
+        backgroundColor: COLORS.SURFACE.LIGHT,
       }}
       columnWrapperStyle={{
         gap: 12,
         paddingHorizontal: 20,
       }}
       keyExtractor={item => item.id}
+      onEndReached={() => {
+        if (hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      }}
+      onEndReachedThreshold={0.5}
+      ListFooterComponent={
+        isFetchingNextPage ? (
+          <ActivityIndicator
+            size={'large'}
+            color={COLORS.BRWON.NORMAL}
+            style={{ paddingVertical: 20 }}
+          />
+        ) : undefined
+      }
       ListHeaderComponent={
         <>
-          <View >
+          <View>
             <StatusBar barStyle="light-content" />
             <View style={{ height: 390 }}>
               <View style={styles.header}>
@@ -130,7 +111,11 @@ export const HomeScreen = () => {
                 <HomeBanner />
               </View>
             </View>
-            <Homecategories />
+            <Homecategories
+              activeId={selectedCategoryId}
+              onPress={id => setSelectedCategoryId(id)}
+              categories={categories}
+            />
           </View>
         </>
       }
@@ -147,20 +132,17 @@ export const HomeScreen = () => {
 };
 
 const ProductCard = ({
-  id,
-  rating,
   name,
   category,
-  price,
   image,
   onPress,
 }: ProductProp) => {
   return (
     <Pressable onPress={onPress} style={styles.card}>
-      <Image style={styles.productImage} source={image} />
+      <Image style={styles.productImage} src={image} />
       <View style={{ marginTop: 6 }}>
         <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{name}</Text>
-        <Text style={{ color: COLORS.GREY.LIGHT }}>{category}</Text>
+        <Text style={{ color: COLORS.GREY.LIGHT }}>{category.name}</Text>
         <View
           style={{
             marginTop: 4,
@@ -168,7 +150,7 @@ const ProductCard = ({
             justifyContent: 'space-between',
           }}
         >
-          <Text style={{ fontWeight: 'bold', fontSize: 16 }}>$ {price}</Text>
+          <Text style={{ fontWeight: 'bold', fontSize: 16 }}>$ {4.53}</Text>
           <Pressable
             style={{
               width: 44,
